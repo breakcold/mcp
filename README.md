@@ -11,7 +11,7 @@ This repository contains public setup guides, examples, and generated metadata f
 - United States: `https://http.us.breakcold.com/mcp/v1`
 - Europe: `https://http.eu.breakcold.com/mcp/v1`
 
-Choose the region where your Breakcold workspace is hosted.
+Choose the region where your Breakcold workspace is hosted
 
 ## Authentication
 
