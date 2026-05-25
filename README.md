@@ -29,6 +29,12 @@ For user sign-in applications managed by Breakcold, send `X-Breakcold-Organizati
 - [LibreChat](./examples/librechat.md)
 - [Microsoft 365 Copilot](./examples/microsoft-365-copilot.md)
 
+## Skill
+
+This repository also ships the [Breakcold CRM skill](./skills/breakcold-crm/SKILL.md), an AgentSkills-compatible playbook for AI agents operating Breakcold through MCP.
+
+Install it by copying [skills/breakcold-crm](./skills/breakcold-crm) into your agent's skills directory, then configure the Breakcold MCP endpoint for your region. See [Skill setup](./docs/skill.md).
+
 ## Generated files
 
 - [generated/tools.json](./generated/tools.json) contains the public MCP tool metadata generated from the Breakcold public API contract.
@@ -41,6 +47,7 @@ For user sign-in applications managed by Breakcold, send `X-Breakcold-Organizati
 - [Tool reference](./docs/tools.md)
 - [Authentication](./docs/auth.md)
 - [Rate limits](./docs/rate-limits.md)
+- [Skill setup](./docs/skill.md)
 
 ## Source of truth
 
