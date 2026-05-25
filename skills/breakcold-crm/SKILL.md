@@ -1,14 +1,14 @@
 ---
 name: breakcold-crm
 description: The Breakcold CRM Agent has 50+ tools to control your CRM across multiple channels including emails, LinkedIn, meetings, WhatsApp and Telegram. Via the Breakcold MCP server, it reads/writes people, companies, deals, tasks, notes, custom fields, and pipeline/Kanban views — and reads your full multichannel inbox so it acts on real conversations. Six workflows — (1) multichannel auto-tasks for stalled conversations, (2) pipeline auto-movement on inbox signals, never backward, (3) workspace-aware reports that adapt to sales, agency, recruiting, or community use, (4) prospect research notes written to records, (5) inbox contact detection with a strict 95% confidence rule, (6) full CRM setup from a website URL. Use whenever the user mentions Breakcold, their CRM, deals, pipeline, Kanban, follow-ups, sales reports, prospect research, contact creation, or CRM setup — even when "Breakcold" isn't named explicitly, as long as the Breakcold MCP is connected.
-metadata: { "version": "0.6.2" }
+metadata: { "version": "0.6.3" }
 ---
 
 # Breakcold CRM
 
 The expert playbook for any AI agent operating a user's Breakcold CRM through the Breakcold MCP server. Optimized for **speed**, **error-proofing**, and **minimum back-and-forth** with the user.
 
-This skill is designed to be universal: the markdown content works the same way whether the agent runs on Claude apps, Claude Code, OpenClaw, Hermes Agent (Nous Research), Codex, Cursor, Windsurf, Cline, Continue, Goose, ChatGPT, Open WebUI, OpenHands, TypingMind, LibreChat, LM Studio, Microsoft 365 Copilot, or any other MCP-capable client. The skill follows the [AgentSkills](https://agentskills.io) format, so it loads natively on platforms that support it.
+This skill is designed to be universal: the markdown content works the same way whether the agent runs on Claude apps, Claude Code, OpenClaw, Hermes Agent (Nous Research), Codex, Cursor, Windsurf, Cline, Continue, Goose, ChatGPT, Open WebUI, OpenHands, TypingMind, LibreChat, LM Studio, Microsoft 365 Copilot, or any other MCP-capable client. The skill follows the [AgentSkills](https://agentskills.io) format, so it loads natively on platforms that support it. Installation differs per platform — see `DEPLOYMENT.md`.
 
 ## What this skill covers
 
@@ -77,7 +77,7 @@ These rules exist because the user explicitly asked for **speed, error-proofing,
 - **Ask only when it actually changes the output.** Defaults are your friend; surface them as "I'll do X — say so if you'd rather Y." Don't ask about obvious stages or obvious decisions.
 - **Respect rate limits gracefully.** On HTTP 429 / JSON-RPC `-32029`, wait the `Retry-After` interval and resume from the same point. Don't restart the workflow. See `references/fundamentals.md § 7`.
 - **Mirror the user's language for anything written into Breakcold or shown to the user.** Task titles, note bodies, report headlines, confirmation messages, stage names, and view names all match the user's language (and the language already present in their workspace). If a user writes to you in French, write `Relancer — fil email en silence (9 jours)` not `Follow up — email thread went quiet (9 days)`. The single exception: **internal breadcrumb prefixes** like `[breakcold-crm:auto-tasks 2026-05-23]` stay in English so future runs can parse them reliably across users. Everything else translates.
-- **Conversations live on people — traverse relations before concluding "no signal".** Deals, Companies, and most non-Person objects don't usually have conversations attached directly. Their **linked People do**. Whenever a workflow checks for "activity" on a parent object, **always also fetch conversations on the linked People records**. Concluding "inactive" on a Deal whose linked Contacts are actively replying is the most common false-negative in this skill. The relevant action playbook (e.g., `action-pipeline.md` step 3b) makes this explicit; this rule is the universal version.
+- **Conversations live on people — traverse relations before concluding "no signal", and create tasks on the Person where the conversation lives.** Deals, Companies, and most non-Person objects don't usually have conversations attached directly. Their **linked People do**. Whenever a workflow checks for "activity" on a parent object, **always also fetch conversations on the linked People records**. And whenever a workflow creates a task in response to conversation activity, **the task goes on the Person record, not on the parent Deal or Company** — so the task can link to the actual conversation. Concluding "inactive" on a Deal whose linked Contacts are actively replying, or creating a task on a Deal that can't link to the conversation, are the two most common false-negatives in this skill. See `references/action-pipeline.md` step 3b for the signal-traversal procedure and `references/action-tasks.md` step 2 for the task-placement rule.
 - **Notes are HTML.** When calling `notes_create` or `notes_update`, the `content` field renders as rich HTML in Breakcold. Plain text with `\n` line breaks comes out as one unbroken paragraph — the user will have to ask you to reformat. Use semantic HTML (`<h3>`, `<p>`, `<ul>/<li>`, `<strong>`, `<hr>`) for any note longer than two sentences. Always also provide `contentPlain` as the plain-text fallback. See `references/fundamentals.md § 11 - notes_create` for the payload shape and `references/action-prospect-research.md` step 6 for a structured template.
 
 ## Routing — match the user's phrasing to a reference
@@ -119,5 +119,11 @@ Any of the six actions can run as a routine. When you set one up, always offer t
 ## Deliverables outside Breakcold (reports, exports)
 
 When an action produces a visual artifact (most relevant for action 3 — reports), always render it on-brand. Pull `references/branding.md` first so colors, type, and layout are consistent without thinking.
+
+## Installation and deployment
+
+The way this skill gets loaded depends on the agent platform. See `DEPLOYMENT.md` for platform-by-platform instructions covering Claude apps, Claude Code, OpenClaw, Hermes Agent, Codex, Cursor, Windsurf, Cline, Continue, Goose, ChatGPT, Open WebUI, OpenHands, TypingMind, LibreChat, LM Studio, Microsoft 365 Copilot, and plain API integrations.
+
+---
 
 **Reminder.** Open the reference file for the action you're running. The references contain the exact tool sequences, defaults, and edge cases. Operating from memory is how mistakes happen — and the user explicitly asked for error-proofing.
