@@ -2,7 +2,7 @@
 
 Connect Breakcold to OpenClaw as a remote MCP server.
 
-Website: [https://openclaw.ai](https://openclaw.ai)
+Website: https://openclaw.ai
 
 ## Endpoint
 
@@ -11,32 +11,25 @@ Use the MCP endpoint for the region where your Breakcold workspace is hosted.
 - United States: `https://http.us.breakcold.com/mcp/v1`
 - Europe: `https://http.eu.breakcold.com/mcp/v1`
 
-## Setup
+## OAuth setup
 
-Add Breakcold to OpenClaw's MCP server registry:
+1. Add Breakcold to OpenClaw's MCP server registry with openclaw mcp set.
+2. Use the MCP server URL for your Breakcold workspace region.
+3. Set transport to streamable-http.
+4. Use an Authorization bearer header with a Breakcold bearer key.
 
-```bash
-openclaw mcp set breakcold '{"url":"https://http.us.breakcold.com/mcp/v1","transport":"streamable-http","headers":{"Authorization":"Bearer <your Breakcold bearer key>"}}'
-```
+Use OAuth when OpenClaw asks you to connect or sign in.
 
-Verify the server is saved:
+## Bearer-token fallback
 
-```bash
-openclaw mcp show breakcold --json
-```
-
-Use the Europe URL instead if your Breakcold workspace is hosted in Europe.
-
-OpenClaw's MCP registry stores server definitions for runtimes that consume MCP servers, and Breakcold is exposed as a Streamable HTTP MCP server.
-
-## Bearer-token access
-
-OpenClaw connects to Breakcold using a bearer key rather than an interactive OAuth flow. Use bearer-token access when an agent should not act as a signed-in user, or when running OpenClaw in unattended/service mode.
+Use bearer-token access only when OpenClaw cannot complete OAuth or when an agent should not act as a signed-in user.
 
 Default bearer-token scopes for this setup:
 
 - `records:read`
 
-Store the key in an environment variable such as `BREAKCOLD_MCP_TOKEN` and reference it from the OpenClaw registry entry instead of hard-coding the value.
+Store the key in an environment variable such as `BREAKCOLD_MCP_TOKEN` and configure your client to send it as an Authorization bearer token.
 
-For sensitive CRM access, keep the bearer key scoped to the minimum Breakcold tools your OpenClaw agent needs.
+## Note
+
+OpenClaw stores MCP server definitions for runtimes that consume MCP servers, so keep the Breakcold bearer key scoped to the minimum tools the agent needs.

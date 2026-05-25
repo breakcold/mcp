@@ -1,7 +1,7 @@
 {
   "name": "Breakcold MCP",
   "repository": "breakcold/mcp",
-  "generatedAt": "2026-05-25T01:54:00.951Z",
+  "generatedAt": "2026-05-25T10:11:05.439Z",
   "source": {
     "repository": "breakcold/v2",
     "contract": "packages/backend/convex/public_api/contract.ts"
@@ -111,6 +111,42 @@
         "Add Breakcold as a remote MCP server using the MCP server URL.",
         "If prompted for headers, set Authorization to Bearer followed by a Breakcold bearer key."
       ]
+    },
+    {
+      "slug": "openclaw",
+      "name": "OpenClaw",
+      "description": "Connect Breakcold to OpenClaw as a remote MCP server.",
+      "builtBy": "OpenClaw",
+      "websiteUrl": "https://openclaw.ai",
+      "setupTarget": "OpenClaw MCP registry",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Add Breakcold to OpenClaw's MCP server registry with openclaw mcp set.",
+        "Use the MCP server URL for your Breakcold workspace region.",
+        "Set transport to streamable-http.",
+        "Use an Authorization bearer header with a Breakcold bearer key."
+      ],
+      "setupNote": "OpenClaw stores MCP server definitions for runtimes that consume MCP servers, so keep the Breakcold bearer key scoped to the minimum tools the agent needs."
+    },
+    {
+      "slug": "hermes",
+      "name": "Hermes",
+      "description": "Connect Breakcold to Hermes as a remote MCP server.",
+      "builtBy": "Nous Research",
+      "websiteUrl": "https://hermes-agent.nousresearch.com/docs",
+      "setupTarget": "Hermes MCP config",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Open your Hermes MCP config.",
+        "Add Breakcold under mcp_servers with the MCP server URL for your workspace region.",
+        "Set auth to oauth for user sign-in.",
+        "Restart Hermes or run /reload-mcp after saving the config."
+      ],
+      "setupNote": "For bearer-token fallback, set an Authorization bearer header with a narrow Breakcold bearer key and only expose the tools the Hermes agent needs."
     },
     {
       "slug": "librechat",

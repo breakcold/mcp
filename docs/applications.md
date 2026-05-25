@@ -9,6 +9,8 @@ Use these examples to connect Breakcold MCP to common AI tools.
 | [Codex](../examples/codex.md) | Connect Breakcold to Codex for agent workflows that need CRM context. | `records:read` |
 | [TypingMind](../examples/typingmind.md) | Connect Breakcold to TypingMind as a remote MCP server. | `records:read` |
 | [LM Studio](../examples/lm-studio.md) | Use Breakcold tools from local models in LM Studio chat. | `records:read` |
+| [OpenClaw](../examples/openclaw.md) | Connect Breakcold to OpenClaw as a remote MCP server. | `records:read` |
+| [Hermes](../examples/hermes.md) | Connect Breakcold to Hermes as a remote MCP server. | `records:read` |
 | [LibreChat](../examples/librechat.md) | Connect Breakcold to LibreChat workspaces that have MCP enabled. | `records:read` |
 | [Microsoft 365 Copilot](../examples/microsoft-365-copilot.md) | Connect Breakcold through Microsoft 365 Copilot custom connectors. | `records:read` |
 
