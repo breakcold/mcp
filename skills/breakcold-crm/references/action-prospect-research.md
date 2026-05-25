@@ -40,6 +40,14 @@ Stack the signals — one alone usually isn't enough.
 
 ## Playbook — exact tool sequence
 
+### Execution mode — small-batch first, main thread only, page size 20
+
+Before iterating, three universal rules apply (see `SKILL.md` universal rules + `fundamentals.md § 7.5`):
+
+- **Page size:** every `records_list` call uses **`limit: 20`**. Non-negotiable. Especially relevant when the cohort is "all new records added in the last N days" — that can easily be 50+ records, which would exceed the inline payload threshold without page-size discipline.
+- **Main thread only:** every tool call (`records_list`, `notes_list`, `notes_create`, web searches, `custom_activities_create`) runs in the main thread. Do **not** invoke any sub-agent / task-delegation tool. Research benefits especially from main-thread continuity because the web-search results need to flow into the same context as the CRM data.
+- **Small-batch first for one-shot runs:** process only the first 20 records of the cohort, write the notes, then surface results and ask the user "say *continue* to sweep the rest." Scheduled runs proceed end-to-end. For narrow cohorts (≤20 records — e.g., "research these 3 contacts I just added"), there's nothing to small-batch; just process them.
+
 For each record in scope:
 
 1. **Read the record.** `records_get` to pull full field values — including any custom fields the user has. Also `notes_list` to see if research already exists.
