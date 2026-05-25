@@ -32,61 +32,124 @@ Defaults if the user doesn't answer or says "you decide":
 
 ## Playbook — exact tool sequence
 
-For a **one-shot run** (not a routine yet):
+### Execution mode — small-batch first
 
-1. **Discover** (if not cached):
-   - `workspaces_list` → workspace ID.
-   - `crm_objects_list` → IDs for Person, Company, Deal (and any custom records the user wants in scope).
-   - `crm_fields_list` for those objects → field IDs.
-   - Member list — get from `capabilities_list` or workspace context.
+Before iterating the cohort, decide which mode this run is in:
+
+- **One-shot user-initiated run** (the user said "create follow-up tasks for X" in chat): process **only the first 20 records** of the cohort, write everything, then surface results and ask:
+  > I processed the first 20 — created **{N}** tasks, skipped **{M}** for duplicates. Say *continue* to sweep the rest.
+  Wait for the user's confirmation before fetching more pages.
+- **Scheduled routine run** (a saved cadence is triggering this): process end-to-end with page-by-page pagination — the user already approved the cadence and isn't watching the run live.
+
+This is a universal skill rule (SKILL.md → "Small-batch first for one-shot runs"), not a workflow-specific tip. It bounds context, prevents the file-dump-then-degrade cascade, and gives the user a reversible checkpoint.
+
+### Page sizes — never higher than 20
+
+Every `records_list` and `inbox_conversations_search` call in this playbook **uses `limit: 20`**. This is non-negotiable. Larger pages produce responses that exceed the inline payload threshold on common agent runtimes, get saved to a file, and trigger the model's confidence-loss cascade (file truncation → sub-agent delegation → context restart → loop). See `references/fundamentals.md § 7.5` for the full rationale.
+
+### No sub-agent delegation
+
+Every tool call below runs in the main thread. Do **not** invoke any sub-agent / task-delegation tool (`Agent`, `Task`, `dispatch_agent`, `subagent`, `delegate` — by whatever name the runtime calls it). Sub-agents lose the cached IDs, can't share parallel fetches with the main thread, and stall on tool-approval prompts the user can't see.
+
+### The steps
+
+1. **Discover — or use pre-cached IDs.**
+   - **If this is a scheduled run, the prompt should embed all the IDs the agent needs:** `workspaceId`, `objectTypeId` for Person (and Deal/Company if the cohort comes from there), `pipelineStageFieldId`, and the option IDs for skip-stages (`Lost`, `Won`, `Not a fit`, etc.). Embed them in the scheduled prompt itself (via `routines.md`). The agent should never re-discover them at scheduled-run time — that's 4-6 wasted tool calls and a common source of early-run failures.
+   - **If this is a one-shot run and the IDs aren't cached:** discover once — `workspaces_list`, `crm_objects_list`, `crm_fields_list` for relevant objects, `crm_field_options_list` on the stage field. Cache everything for the session.
+   - **Also list the user's saved views once:** call `crm_record_views_list` (on Person, and Deal/Company if relevant). The view names are signal for the cohort-selection step below.
+   - **Pull the member list** — from `capabilities_list` or workspace context.
 
 2. **Define the cohort. Tasks always land on Person records — never on Deals or Companies.** Conversations live on people; tasks are about conversations; therefore tasks live on people.
 
-   - **If the user asks for tasks on People directly** (the most common case): the cohort is all active People (excluding any in lost/closed/DNC stages).
-   - **If the user asks for tasks "on deals" or "on companies"**: don't iterate over Deals or Companies themselves. Instead, **walk each Deal (or Company) → its linked Person records → and the resulting cohort is those People.** One task per stalled Person, attached to the Person record.
-   - **Exclude** records in pipeline stages that mean "lost", "closed lost", "rejected", "do not contact". This applies to whichever stage field exists on Person — *and* to the linked Deal's stage when the cohort was sourced from deals (if the deal is lost, skip the linked People for this run).
-   - **Include** all other People that have at least one linked conversation.
+   **Option A — Use a saved view (preferred when one fits).** If the user has a saved record view on Person whose name signals an actionable cohort (e.g., "Active prospects", "Hot leads", "Engaged this week", "My pipeline"), use it directly:
+   > I'll run on your **{view name}** view — say so if you'd rather use a different one or sweep all active people.
+   
+   Pass `viewId` on every `records_list` call. The user's view is the filter language; trying to invent a separate filter is wasted effort.
 
-   **Why this rule exists:** a task on a Deal can't link to a conversation (deals don't have conversations directly). A task on a Person can. Putting tasks on Deals or Companies produces orphan reminders the user can't act on — they open the task and have no thread to reply into. This is the most common task-creation antipattern; this rule prevents it.
+   **Option B — All active Person records.** If no relevant view exists or the user explicitly wants the full cohort, list all active People, excluding records in pipeline stages that mean "lost", "closed lost", "rejected", "do not contact" (filter client-side per page from the cached stage option list).
 
-3. **For each candidate record**, fetch in this order — and **batch in parallel up to the rate limit**:
-   - `inbox_conversations_list` (record-scoped) → all linked conversations.
-   - For the **most recent conversation** (across all channels), `inbox_messages_list` with a small page → just enough to find the timestamp of the most recent message.
+   **If the user asks for tasks "on deals" or "on companies":** don't iterate over Deals or Companies themselves. Instead, **walk each Deal (or Company) → its linked Person records → and the resulting cohort is those People.** One task per stalled Person, attached to the Person record. (Walking the relations still uses `limit: 20` per page on the Deal/Company side.)
+
+   **Why "tasks always on People" exists:** a task on a Deal can't link to a conversation (deals don't have conversations directly). A task on a Person can. Putting tasks on Deals or Companies produces orphan reminders the user can't act on — they open the task and have no thread to reply into.
+
+3. **Iterate the cohort page-by-page.** This is the canonical loop pattern for every cohort-iterating workflow in this skill:
+
+   ```
+   cursor = None
+   while True:
+       page = records_list(
+           workspaceId,
+           objectTypeId = Person,
+           limit = 20,
+           cursor = cursor,
+           viewId = optional from step 2
+       )
+
+       # Filter the page client-side immediately — discard rejected records
+       candidates = [r for r in page.data if r.stage not in terminal_stages]
+
+       # For each candidate, do steps 4-7 (per-record sub-steps below)
+       # Batch the parallel fetches in groups of up to 10 to respect rate limits
+       for candidate in candidates:
+           [step 4: gather signal]
+           [step 5: idempotency check]
+           [step 6: create task, with the conversationId]
+           [step 7: breadcrumbs]
+
+       # Stop here for one-shot runs — see Execution mode
+       if one_shot:
+           break
+
+       # Continue for scheduled runs
+       if not page.pagination.hasMore:
+           break
+       cursor = page.pagination.cursor
+   ```
+
+   **Hard rules inside this loop:**
+   - One page of raw record data at a time. Discard the page object before fetching the next.
+   - No `view`-on-a-file or line-by-line reading of any dumped tool result. If a response is dumped to a file by the runtime (rare with `limit: 20`, but possible), read it once whole or use code execution to extract specific fields. Never iterate the file in chunks.
+   - All parallel calls go in the **main thread**. No sub-agent delegation.
+
+4. **Per-record: gather signal.** For the active Person:
+   - `inbox_conversations_list` (record-scoped) → all linked conversations. Use the response's `lastMessageAtMs` directly — don't call `inbox_messages_list` just to check the timestamp.
+   - Only if you need the message *content* (to derive the topic for the task title), call `inbox_messages_list` on the most recent conversation with a small page (last 5-10 messages).
    - Compute days since last message. If ≥ the user's threshold, the record qualifies.
 
-4. **Idempotency check.** Call `tasks_list` on the record. **Skip** if any open task on this record has:
+5. **Per-record: idempotency check.** Call `tasks_list` on the record. **Skip** if any open task on this record has:
    - A title that contains "follow up", "ping", "check in", or similar (case-insensitive), **and**
    - A due date within the next 7 days.
 
-5. **Create the task.** Call `tasks_create` with:
+6. **Per-record: self-check before creating.** Before calling `tasks_create`:
+   - ✓ The record is a Person (not a Deal or Company).
+   - ✓ A conversation ID is in hand (or you've decided to use the fallback "no clear topic" title).
+   - ✓ `CURRENT_USER_ID` is known (or you'll resolve it from the response of this very call — see `fundamentals.md § 3.5`).
+   - ✓ No sub-agent was invoked. If yes, restart this record's processing in the main thread.
+
+   Then call `tasks_create` with:
    - **record_id:** the **Person** record being followed up on. Never a Deal ID, never a Company ID — see step 2.
-   - **title:** follow the pattern below — see "Task title pattern" later in this file for full rules.
-     ```
-     Follow up: {2-6 word topic}
-     ```
-     Examples:
-     - `Follow up: Pricing concerns around tokens`
-     - `Follow up: Q4 contract terms`
-     - `Follow up: SOC 2 questions`
+   - **title:** follow the pattern `Follow up: {2-6 word topic}` — see "Task title pattern" later in this file for full rules. Examples: `Follow up: Pricing concerns around tokens`, `Follow up: Q4 contract terms`.
    - **due_date:** today (or next business day if today is weekend; do not auto-schedule weeks out).
    - **assigneeUserIds:** array containing the cached `CURRENT_USER_ID` (or whoever was selected during setup). **Never null, never empty.**
-   - **conversationId:** include the conversation ID from step 3 so the task deep-links into the thread when opened. The conversation lives on the Person record, which is exactly where the task lives — they line up correctly. If the cohort was sourced from deals (step 2), the conversation still attaches to the Person, not the Deal.
+   - **conversationId:** include the conversation ID from step 4 so the task deep-links into the thread when opened.
 
-6. **Breadcrumb on the Person.** Call `custom_activities_create` on the Person record with prefix:
-   ```
-   [breakcold-crm:auto-tasks {YYYY-MM-DD}] Follow-up task created; last activity {N} days ago ({channel}).
-   ```
-
-6b. **Audit breadcrumb on the linked Deal (only when the cohort was sourced from deals).** When the user asked for "tasks on deals" and the agent walked Deal → linked People (step 2), also write a `custom_activities_create` on each Deal that produced follow-up tasks for its linked People:
-   ```
-   [breakcold-crm:auto-tasks {YYYY-MM-DD}] {N} follow-up task(s) created for linked Person(s): {name1}, {name2}.
-   ```
-   This gives the user audit visibility on the Deal record — they see "tasks were created for this deal" without losing the fact that the actual tasks live on the People. **Don't** create a task on the Deal; only the breadcrumb.
-
-7. **Repeat** for the cohort, respecting rate limits (see `fundamentals.md`).
+7. **Per-record: breadcrumbs.**
+   - **On the Person:** `custom_activities_create` with prefix:
+     ```
+     [breakcold-crm:auto-tasks {YYYY-MM-DD}] Follow-up task created; last activity {N} days ago ({channel}).
+     ```
+   - **On the linked Deal (only when the cohort was sourced from deals):** also write a `custom_activities_create` on each Deal that produced follow-up tasks for its linked People:
+     ```
+     [breakcold-crm:auto-tasks {YYYY-MM-DD}] {N} follow-up task(s) created for linked Person(s): {name1}, {name2}.
+     ```
+     This gives the user audit visibility on the Deal record — they see "tasks were created for this deal" without losing the fact that the actual tasks live on the People. **Don't** create a task on the Deal; only the breadcrumb.
 
 8. **Summarize** to the user in one short message:
    > Created **{N}** follow-up tasks across **{N}** contacts. Quietest thread: **{name}** at **{N} days**. Skipped **{M}** records that already had open follow-up tasks.
+   
+   For one-shot runs, end with: "Say *continue* to sweep the rest of the cohort."
+
+
 
 ## Edge cases
 

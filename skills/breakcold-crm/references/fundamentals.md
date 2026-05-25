@@ -59,6 +59,7 @@ If both `capabilities_list` and `workspaces_list` came back without surfacing th
 
 ### What never to do
 
+- **Never make a dedicated probe call just to learn the user's ID.** Don't create a test record, test activity, or test task whose only purpose is to read the creator ID off the response. That's wasted budget and risks leaving an orphan record. The user ID will surface on the first *legitimate* write of the session — wait for that.
 - **Never leave `assigneeUserIds` empty/null on tasks the agent creates on the user's behalf.** Unassigned tasks vanish from everyone's queue and the user thinks the workflow silently failed. If you genuinely have no user ID after the steps above, create the task, read the ID from the response, then `tasks_update` to add the assignee. That's an extra call but it's the price of correctness.
 - **Never ask the user "what's your user ID?"** They don't know it (it's an opaque string like `hs7wgdn9n31gbw7232j2w5wr6x84jbr9`). Resolve it from API responses.
 - **Don't assume one workspace's member list applies to another.** If the user switches workspaces mid-session (rare), re-resolve. Workspace-scoped IDs aren't portable.
@@ -166,6 +167,102 @@ On a hit you get HTTP `429` and JSON-RPC error `-32029` with message `Public API
 3. Don't fan out parallel retries.
 4. If you're being throttled repeatedly inside one workflow, you're doing too much in one shot. Break the job into smaller batches (e.g., process 50 records per minute instead of 500).
 5. Tell the user once if it materially delays the result. Don't surface every 429.
+
+## 7.5. Page sizes and pagination discipline
+
+Every paginated endpoint in the Breakcold API follows the same shape: a `limit` query parameter (default 50, max 100), a cursor-based pagination model via `cursor`, and a response shape with `data: [...]` and `pagination: { cursor, hasMore }`.
+
+**The skill caps `limit` at 20.** This is lower than the API maximum on purpose:
+
+| Limit value      | Per-page response size (typical)  | Behavior on common agent runtimes        |
+|------------------|------------------------------------|------------------------------------------|
+| `limit: 100`     | ~500KB+ for records with many fields | Saved to file; agent reads truncated preview; model loses confidence |
+| `limit: 50`      | ~200-300KB                          | Often saved to file; preview-only        |
+| **`limit: 20`**  | **~80-120KB**                       | **Returned inline; model sees full data** |
+| `limit: 10`      | ~40-60KB                            | Inline; very safe, but wastes round trips |
+
+The ~50KB-150KB inline threshold varies by runtime, but 20 records is the sweet spot — safe under every runtime we've tested, while not so small that pagination round-trips dominate.
+
+### What the API actually exposes
+
+From the OpenAPI spec, the parameters available on the high-traffic list endpoints:
+
+**`records_list`** (`GET /records`):
+- `limit` (1-100, default 50) — **always pass `20`**.
+- `cursor` — opaque pagination cursor from previous response.
+- `workspaceId` — required scope.
+- `objectTypeId` / `objectTypeSlug` — scope by object.
+- **`viewId`** — filter by a saved record view. **Prefer this whenever the user has a relevant view.** The user's saved views ARE the filter language; the API doesn't expose `where field = X` syntax.
+- `archived` (default false) — already excludes archives, you don't need to filter client-side.
+- `search` — text match on display name.
+
+**`inbox_conversations_search`** (`GET /inbox/conversations`):
+- `limit` (1-100, default 50) — **always pass `20`**.
+- `cursor`.
+- `workspaceId` (required).
+- **`viewId`** — saved inbox view.
+- **`hasLinkedRecords`** (boolean) — filter to conversations already linked to a record (true) or floating ones (false).
+- `search`.
+
+**Filters that do NOT exist (don't try to pass them):**
+- ❌ `updatedAfter` / `createdAfter` date filter.
+- ❌ Generic `where field = X` syntax.
+- ❌ `stage = X` or `assignedTo = X` direct field filters.
+- ❌ Multiple `viewId` values (single view per call).
+
+### The "views as filters" pattern
+
+Breakcold's filtering primitive is the user's saved views. When a workflow needs a narrowed cohort:
+
+1. Call `crm_record_views_list` (or `inbox_views_list`) at the start of the workflow.
+2. Identify a relevant view by name (e.g., "Active prospects", "Hot deals", "Unassigned"). Use simple keyword matching against the view name.
+3. Surface it to the user: "I'll run on the **{view name}** view — say so if you'd rather use a different one or sweep everything."
+4. Pass `viewId` on every `records_list` / `inbox_conversations_search` call.
+
+The user already organizes their workspace with views; the agent rides on top of that mental model instead of trying to invent its own filter language.
+
+### The page-by-page loop (the canonical pattern)
+
+```
+cursor = None
+while True:
+    page = records_list(workspaceId, objectTypeId, limit=20, cursor=cursor, viewId=optional)
+    
+    # 1. Filter client-side immediately — never carry rejected records forward
+    active = [r for r in page.data if r not in terminal_stages]
+    
+    # 2. For the active set on this page, fetch detail in parallel
+    #    Batch size ≤10 in parallel to respect rate limits
+    conversations = parallel_fetch(active, batch_size=10)
+    
+    # 3. Decide and mutate immediately, on this page's records only
+    for record, convs in zip(active, conversations):
+        decision = decide(record, convs)
+        if decision == MUTATE:
+            tasks_create(...)         # or records_update, notes_create
+            custom_activities_create(...)  # breadcrumb
+    
+    # 4. Discard this page's raw data before fetching next
+    if not page.pagination.hasMore:
+        break
+    cursor = page.pagination.cursor
+```
+
+**Key invariants:**
+- Never hold more than one page of raw record data in working context.
+- Never delegate any step of this loop to a sub-agent.
+- Process each page completely before fetching the next.
+- For one-shot user-initiated runs, **stop after the first page** and ask the user to confirm "continue" before sweeping the rest. (See SKILL.md universal rule "Small-batch first for one-shot runs.")
+- For scheduled routine runs, run end-to-end without confirmation.
+
+### Reading data from the list response
+
+The list responses include enough metadata that you often don't need to refetch:
+
+- `records_list` returns `displayName`, `fields` (all field values), `createdAt`, `updatedAt`, `isArchived`. You usually don't need `records_get` after a `records_list` unless you specifically need data not in `fields`.
+- `inbox_conversations_search` returns `channel`, `subject`, **`lastMessageAtMs`**, `lastMessageSnippet`, `isClosed`, `hasLinkedRecords`, `attendees`, `assignees`. You usually don't need `inbox_messages_list` to compute staleness — the timestamp is in the list response.
+
+**Anti-pattern:** calling `inbox_messages_list` on every conversation just to check "when was the last message?" — the `lastMessageAtMs` field already tells you, and you can decide staleness from it without fetching messages. Only fetch messages when you need their *content* (to derive a topic for a task title, or to assess sentiment).
 
 ## 8. Caching guidance — what to remember between calls
 
