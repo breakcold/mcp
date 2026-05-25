@@ -1,0 +1,151 @@
+{
+  "name": "Breakcold MCP",
+  "repository": "breakcold/mcp",
+  "generatedAt": "2026-05-25T01:41:48.967Z",
+  "source": {
+    "repository": "breakcold/v2",
+    "contract": "packages/backend/convex/public_api/contract.ts"
+  },
+  "docs": {
+    "mcp": "https://docs.breakcold.com/api/mcp",
+    "applications": "https://docs.breakcold.com/api/mcp-applications"
+  },
+  "regions": [
+    {
+      "id": "us",
+      "label": "United States",
+      "baseUrl": "https://http.us.breakcold.com",
+      "mcpUrl": "https://http.us.breakcold.com/mcp/v1"
+    },
+    {
+      "id": "eu",
+      "label": "Europe",
+      "baseUrl": "https://http.eu.breakcold.com",
+      "mcpUrl": "https://http.eu.breakcold.com/mcp/v1"
+    }
+  ],
+  "applications": [
+    {
+      "slug": "claude",
+      "name": "Claude",
+      "description": "Connect Breakcold to Claude as a remote MCP server with OAuth.",
+      "builtBy": "Anthropic",
+      "websiteUrl": "https://claude.ai",
+      "setupTarget": "Claude > Connectors",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Open Claude settings and go to Customize > Connectors.",
+        "Click +, choose Add custom connector, and name it Breakcold.",
+        "Paste the MCP server URL, add the connector, then connect or sign in when Claude asks.",
+        "In a chat, click + > Connectors and enable Breakcold for the conversation."
+      ]
+    },
+    {
+      "slug": "chatgpt",
+      "name": "ChatGPT",
+      "description": "Connect Breakcold to ChatGPT apps or custom MCP apps.",
+      "builtBy": "OpenAI",
+      "websiteUrl": "https://chatgpt.com",
+      "setupTarget": "Settings > Apps",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Open ChatGPT settings and go to Apps.",
+        "Add or enable the Breakcold app for your workspace.",
+        "Use the MCP server URL when ChatGPT asks for the remote MCP endpoint.",
+        "Connect the app, then call Breakcold from the app picker or with an @ mention."
+      ],
+      "setupNote": "Workspace admins may need to enable custom apps before members can connect Breakcold."
+    },
+    {
+      "slug": "codex",
+      "name": "Codex",
+      "description": "Connect Breakcold to Codex for agent workflows that need CRM context.",
+      "builtBy": "OpenAI",
+      "websiteUrl": "https://developers.openai.com/codex",
+      "setupTarget": "Codex CLI",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Add the Breakcold MCP server with `codex mcp add breakcold --url https://http.us.breakcold.com/mcp/v1`.",
+        "Authorize Codex with Breakcold using `codex mcp login breakcold` when OAuth is available.",
+        "Run `codex mcp list` to verify the server is configured.",
+        "Use the Europe MCP endpoint instead if your Breakcold workspace is hosted in Europe."
+      ],
+      "setupNote": "For bearer-token access, configure `bearer_token_env_var = \"BREAKCOLD_MCP_TOKEN\"` in the Breakcold MCP server entry in your Codex config."
+    },
+    {
+      "slug": "typingmind",
+      "name": "TypingMind",
+      "description": "Connect Breakcold to TypingMind as a remote MCP server.",
+      "builtBy": "TypingMind",
+      "websiteUrl": "https://www.typingmind.com",
+      "setupTarget": "MCP Store",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Open TypingMind and go to the MCP Store or MCP settings.",
+        "Choose to add a remote MCP server and paste the MCP server URL.",
+        "When TypingMind asks for a connector, use TypingMind Cloud or your private connector.",
+        "Authenticate with Breakcold or provide a bearer key if TypingMind asks for an API key."
+      ]
+    },
+    {
+      "slug": "lm-studio",
+      "name": "LM Studio",
+      "description": "Use Breakcold tools from local models in LM Studio chat.",
+      "builtBy": "LM Studio",
+      "websiteUrl": "https://lmstudio.ai",
+      "setupTarget": "Program > Install",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Open LM Studio and switch to the Program tab.",
+        "Click Install > Edit mcp.json.",
+        "Add Breakcold as a remote MCP server using the MCP server URL.",
+        "If prompted for headers, set Authorization to Bearer followed by a Breakcold bearer key."
+      ]
+    },
+    {
+      "slug": "librechat",
+      "name": "LibreChat",
+      "description": "Connect Breakcold to LibreChat workspaces that have MCP enabled.",
+      "builtBy": "LibreChat",
+      "websiteUrl": "https://www.librechat.ai",
+      "setupTarget": "MCP settings",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Open the MCP settings panel from LibreChat.",
+        "Click + to add a server, name it Breakcold, and choose Streamable HTTP.",
+        "Paste the MCP server URL.",
+        "Use API key authentication with Bearer format if LibreChat asks for credentials."
+      ]
+    },
+    {
+      "slug": "microsoft-365-copilot",
+      "name": "Microsoft 365 Copilot",
+      "description": "Connect Breakcold through Microsoft 365 Copilot custom connectors.",
+      "builtBy": "Microsoft",
+      "websiteUrl": "https://www.microsoft.com/microsoft-365/copilot",
+      "setupTarget": "Copilot > Connectors",
+      "recommendedScopes": [
+        "records:read"
+      ],
+      "setupSteps": [
+        "Ask a Microsoft 365 admin to open the admin center and go to Copilot > Connectors.",
+        "Create a custom connector and choose Connect to MCP server.",
+        "Use the MCP server URL as the connector base URL.",
+        "Complete the OAuth setup so users can connect with their own Breakcold access."
+      ],
+      "setupNote": "Microsoft custom federated connectors currently focus on read-only MCP tools, so validate the Breakcold tool set before publishing it broadly."
+    }
+  ]
+}

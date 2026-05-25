@@ -1,0 +1,1810 @@
+[
+  {
+    "name": "capabilities_list",
+    "description": "List Breakcold MCP capabilities, granted scopes, and the tools available in each capability group.",
+    "capability": "Discovery",
+    "requiredScopes": [],
+    "tokenCost": "0 tokens",
+    "rateLimit": "MCP session authenticated",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "includeTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include tool summaries inside each capability group."
+        },
+        "includeUnavailable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Also include capability groups and tools that require scopes the current actor does not have."
+        },
+        "includeInputSchemas": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include input schemas for listed tools."
+        }
+      }
+    }
+  },
+  {
+    "name": "crm_field_options_create",
+    "description": "Create a CRM field option.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "fieldDefinitionId",
+        "value",
+        "label"
+      ]
+    }
+  },
+  {
+    "name": "crm_field_options_delete",
+    "description": "Delete a CRM field option.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "30 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "fieldOptionId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "fieldDefinitionId",
+        "fieldOptionId"
+      ]
+    }
+  },
+  {
+    "name": "crm_field_options_list",
+    "description": "List CRM field options.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "fieldDefinitionId"
+      ]
+    }
+  },
+  {
+    "name": "crm_field_options_reorder",
+    "description": "Reorder CRM field options.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "optionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "required": [
+        "fieldDefinitionId",
+        "optionIds"
+      ]
+    }
+  },
+  {
+    "name": "crm_field_options_update",
+    "description": "Update a CRM field option.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "fieldOptionId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "fieldDefinitionId",
+        "fieldOptionId"
+      ]
+    }
+  },
+  {
+    "name": "crm_fields_create",
+    "description": "Create a CRM field definition.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "slug": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "fieldType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isRequired": {
+          "type": "boolean"
+        },
+        "isMultiple": {
+          "type": "boolean"
+        },
+        "showInCreateModal": {
+          "type": "boolean"
+        },
+        "defaultValue": {},
+        "validation": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "targetObjectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "notifyOnAssign": {
+          "type": "boolean"
+        },
+        "interactionRollupMode": {
+          "type": "string"
+        },
+        "defaultValueTemplate": {
+          "type": "string"
+        },
+        "isComputed": {
+          "type": "boolean"
+        },
+        "computeExpression": {
+          "type": "string"
+        },
+        "isIdentifier": {
+          "type": "boolean"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 6
+              },
+              "fieldDefinitionId": {
+                "type": "string",
+                "minLength": 6
+              },
+              "value": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              },
+              "order": {
+                "type": "number"
+              },
+              "isDefault": {
+                "type": "boolean"
+              },
+              "isActive": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "fieldDefinitionId",
+              "value",
+              "label",
+              "order",
+              "isDefault",
+              "isActive"
+            ]
+          }
+        }
+      },
+      "required": [
+        "objectTypeId",
+        "slug",
+        "name",
+        "fieldType"
+      ]
+    }
+  },
+  {
+    "name": "crm_fields_delete",
+    "description": "Delete a custom CRM field definition.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "30 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "fieldDefinitionId"
+      ]
+    }
+  },
+  {
+    "name": "crm_fields_get",
+    "description": "Fetch one CRM field definition.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "fieldDefinitionId"
+      ]
+    }
+  },
+  {
+    "name": "crm_fields_list",
+    "description": "List CRM field definitions.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "objectTypeId"
+      ]
+    }
+  },
+  {
+    "name": "crm_fields_reorder",
+    "description": "Reorder CRM fields.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "fieldDefinitionIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "required": [
+        "objectTypeId",
+        "fieldDefinitionIds"
+      ]
+    }
+  },
+  {
+    "name": "crm_fields_update",
+    "description": "Update a CRM field definition.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fieldDefinitionId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "isRequired": {
+          "type": "boolean"
+        },
+        "isHidden": {
+          "type": "boolean"
+        },
+        "isMultiple": {
+          "type": "boolean"
+        },
+        "showInCreateModal": {
+          "type": "boolean"
+        },
+        "defaultValue": {},
+        "validation": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "targetObjectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "notifyOnAssign": {
+          "type": "boolean"
+        },
+        "interactionRollupMode": {
+          "type": "string"
+        },
+        "defaultValueTemplate": {
+          "type": "string"
+        },
+        "isComputed": {
+          "type": "boolean"
+        },
+        "computeExpression": {
+          "type": "string"
+        },
+        "isIdentifier": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "fieldDefinitionId"
+      ]
+    }
+  },
+  {
+    "name": "crm_objects_create",
+    "description": "Create a custom CRM object type.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "slug": {
+          "type": "string"
+        },
+        "nameSingular": {
+          "type": "string"
+        },
+        "namePlural": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspaceId",
+        "slug",
+        "nameSingular",
+        "namePlural"
+      ]
+    }
+  },
+  {
+    "name": "crm_objects_delete",
+    "description": "Delete a custom CRM object type.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "30 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "objectTypeId"
+      ]
+    }
+  },
+  {
+    "name": "crm_objects_get",
+    "description": "Fetch one CRM object type.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "objectTypeId"
+      ]
+    }
+  },
+  {
+    "name": "crm_objects_list",
+    "description": "List CRM object types in a workspace.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "workspaceId"
+      ]
+    }
+  },
+  {
+    "name": "crm_objects_reorder",
+    "description": "Reorder CRM object types.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "objectTypeIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "required": [
+        "workspaceId",
+        "objectTypeIds"
+      ]
+    }
+  },
+  {
+    "name": "crm_objects_update",
+    "description": "Update CRM object metadata.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "nameSingular": {
+          "type": "string"
+        },
+        "namePlural": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "objectTypeId"
+      ]
+    }
+  },
+  {
+    "name": "crm_record_views_create",
+    "description": "Create a CRM record view.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "name": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "table",
+            "kanban"
+          ]
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Full saved view config. Record views support columns, filters, sorts, groupBy, and kanban settings. Inbox views support filters and sorts."
+        }
+      },
+      "required": [
+        "objectTypeId",
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "crm_record_views_delete",
+    "description": "Delete a CRM record view.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "30 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "viewId"
+      ]
+    }
+  },
+  {
+    "name": "crm_record_views_get",
+    "description": "Fetch one CRM record view.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "viewId"
+      ]
+    }
+  },
+  {
+    "name": "crm_record_views_list",
+    "description": "List CRM record views.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "objectTypeId"
+      ]
+    }
+  },
+  {
+    "name": "crm_record_views_reorder",
+    "description": "Reorder CRM record views.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "viewIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "required": [
+        "objectTypeId",
+        "viewIds"
+      ]
+    }
+  },
+  {
+    "name": "crm_record_views_update",
+    "description": "Update a CRM record view and replace its saved config.",
+    "capability": "CRM",
+    "requiredScopes": [
+      "crm:metadata:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "name": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "table",
+            "kanban"
+          ]
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Full saved view config. Record views support columns, filters, sorts, groupBy, and kanban settings. Inbox views support filters and sorts."
+        }
+      },
+      "required": [
+        "viewId"
+      ]
+    }
+  },
+  {
+    "name": "custom_activities_create",
+    "description": "Create a custom activity linked to a CRM record.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "title": {
+          "type": "string"
+        },
+        "descriptionHtml": {
+          "type": "string"
+        },
+        "descriptionPlain": {
+          "type": "string"
+        },
+        "startAt": {
+          "type": "number",
+          "description": "Unix timestamp in ms."
+        },
+        "endAt": {
+          "type": "number",
+          "description": "Unix timestamp in ms."
+        },
+        "linkedRecordIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        },
+        "participantUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "required": [
+        "recordId",
+        "title"
+      ]
+    }
+  },
+  {
+    "name": "inbox_conversations_list",
+    "description": "List conversations linked to a record.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "recordId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_conversations_search",
+    "description": "List or search inbox conversations in a workspace, optionally filtered by inbox view or record-link state.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "hasLinkedRecords": {
+          "type": "boolean"
+        },
+        "search": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspaceId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_messages_get",
+    "description": "Fetch one inbox message.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "messageId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "messageId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_messages_list",
+    "description": "List messages for a conversation.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "conversationId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "conversationId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_create",
+    "description": "Create an inbox view.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "name": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "personal",
+            "workspace",
+            "restricted"
+          ]
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Full saved view config. Record views support columns, filters, sorts, groupBy, and kanban settings. Inbox views support filters and sorts."
+        }
+      },
+      "required": [
+        "workspaceId",
+        "name"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_delete",
+    "description": "Delete an inbox view.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "30 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "viewId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_get",
+    "description": "Fetch one inbox view.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "viewId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_list",
+    "description": "List visible inbox views.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "workspaceId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_sidebar_get",
+    "description": "Fetch inbox view sidebar layout.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "workspaceId"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_sidebar_reorder",
+    "description": "Reorder inbox view sidebar items.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "view",
+                  "folder"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "minLength": 6
+              },
+              "parentFolderId": {
+                "type": "string",
+                "minLength": 6
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ]
+          }
+        }
+      },
+      "required": [
+        "workspaceId",
+        "items"
+      ]
+    }
+  },
+  {
+    "name": "inbox_views_update",
+    "description": "Update an inbox view and replace its saved config.",
+    "capability": "Inbox",
+    "requiredScopes": [
+      "inbox:views:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "name": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "personal",
+            "workspace",
+            "restricted"
+          ]
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Full saved view config. Record views support columns, filters, sorts, groupBy, and kanban settings. Inbox views support filters and sorts."
+        }
+      },
+      "required": [
+        "viewId"
+      ]
+    }
+  },
+  {
+    "name": "meetings_get",
+    "description": "Fetch one meeting with recording and transcript metadata.",
+    "capability": "Meetings",
+    "requiredScopes": [
+      "meetings:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "meetingId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "meetingId"
+      ]
+    }
+  },
+  {
+    "name": "meetings_list",
+    "description": "List workspace meetings with recording and transcript metadata.",
+    "capability": "Meetings",
+    "requiredScopes": [
+      "meetings:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "eventState": {
+          "type": "string",
+          "enum": [
+            "active",
+            "cancelled",
+            "deleted"
+          ]
+        },
+        "hasTranscript": {
+          "type": "boolean"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspaceId"
+      ]
+    }
+  },
+  {
+    "name": "meetings_transcript_list",
+    "description": "List full meeting transcript text in ordered paginated segments.",
+    "capability": "Meetings",
+    "requiredScopes": [
+      "meetings:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "meetingId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "meetingId"
+      ]
+    }
+  },
+  {
+    "name": "notes_create",
+    "description": "Create a note linked to a record.",
+    "capability": "Notes",
+    "requiredScopes": [
+      "notes:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "contentPlain": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "recordId",
+        "title",
+        "content"
+      ]
+    }
+  },
+  {
+    "name": "notes_get",
+    "description": "Fetch a note by ID.",
+    "capability": "Notes",
+    "requiredScopes": [
+      "notes:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "noteId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "noteId"
+      ]
+    }
+  },
+  {
+    "name": "notes_list",
+    "description": "List notes linked to a record.",
+    "capability": "Notes",
+    "requiredScopes": [
+      "notes:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "recordId"
+      ]
+    }
+  },
+  {
+    "name": "notes_update",
+    "description": "Update note content.",
+    "capability": "Notes",
+    "requiredScopes": [
+      "notes:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "noteId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "contentPlain": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "noteId"
+      ]
+    }
+  },
+  {
+    "name": "records_archive",
+    "description": "Archive a CRM record.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "recordId"
+      ]
+    }
+  },
+  {
+    "name": "records_create",
+    "description": "Create a CRM record.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "60 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "objectTypeSlug": {
+          "type": "string"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Map of field slug to value. Values follow the field type: strings for text/social fields, numbers for numeric/date fields, booleans for checkbox, { amount, currencyCode } for currency, { optionId } for select, arrays for multi-value fields."
+        }
+      },
+      "required": [
+        "workspaceId"
+      ]
+    }
+  },
+  {
+    "name": "records_get",
+    "description": "Fetch a CRM record by ID.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "180 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "recordId"
+      ]
+    }
+  },
+  {
+    "name": "records_list",
+    "description": "List or search CRM records.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "objectTypeId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "objectTypeSlug": {
+          "type": "string"
+        },
+        "viewId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "archived": {
+          "type": "boolean"
+        },
+        "search": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "records_restore",
+    "description": "Restore an archived CRM record.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "recordId"
+      ]
+    }
+  },
+  {
+    "name": "records_update",
+    "description": "Update CRM record field values.",
+    "capability": "Records",
+    "requiredScopes": [
+      "records:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Map of field slug to value. Values follow the field type: strings for text/social fields, numbers for numeric/date fields, booleans for checkbox, { amount, currencyCode } for currency, { optionId } for select, arrays for multi-value fields."
+        }
+      },
+      "required": [
+        "recordId",
+        "fields"
+      ]
+    }
+  },
+  {
+    "name": "tasks_complete",
+    "description": "Mark a task as done.",
+    "capability": "Tasks",
+    "requiredScopes": [
+      "tasks:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "taskId"
+      ]
+    }
+  },
+  {
+    "name": "tasks_create",
+    "description": "Create a task linked to a record.",
+    "capability": "Tasks",
+    "requiredScopes": [
+      "tasks:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "title": {
+          "type": "string"
+        },
+        "descriptionHtml": {
+          "type": "string"
+        },
+        "descriptionPlain": {
+          "type": "string"
+        },
+        "dueAt": {
+          "type": "number",
+          "description": "Unix timestamp in ms."
+        },
+        "assigneeUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        },
+        "conversationId": {
+          "type": "string",
+          "minLength": 6
+        }
+      },
+      "required": [
+        "recordId",
+        "title"
+      ]
+    }
+  },
+  {
+    "name": "tasks_list",
+    "description": "List tasks linked to a record.",
+    "capability": "Tasks",
+    "requiredScopes": [
+      "tasks:read"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "includeCompleted": {
+          "type": "boolean"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "recordId"
+      ]
+    }
+  },
+  {
+    "name": "tasks_update",
+    "description": "Update task details.",
+    "capability": "Tasks",
+    "requiredScopes": [
+      "tasks:write"
+    ],
+    "tokenCost": "0 tokens",
+    "rateLimit": "90 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "minLength": 6
+        },
+        "title": {
+          "type": "string"
+        },
+        "descriptionHtml": {
+          "type": "string"
+        },
+        "descriptionPlain": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "todo",
+            "done"
+          ]
+        },
+        "dueAt": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "assigneeUserIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "required": [
+        "taskId"
+      ]
+    }
+  },
+  {
+    "name": "tools_search",
+    "description": "Search available Breakcold MCP tools by name, description, capability, or required scope.",
+    "capability": "Discovery",
+    "requiredScopes": [],
+    "tokenCost": "0 tokens",
+    "rateLimit": "MCP session authenticated",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Search text, such as records, notes, inbox, crm fields, or a tool name."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 20
+        },
+        "includeInputSchemas": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include each matching tool input schema."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "workspaces_list",
+    "description": "List workspaces the authenticated Breakcold actor can access.",
+    "capability": "Workspaces",
+    "requiredScopes": [],
+    "tokenCost": "0 tokens",
+    "rateLimit": "120 requests/min per tool/org",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 50
+        },
+        "cursor": {
+          "type": "string"
+        }
+      }
+    }
+  }
+]
