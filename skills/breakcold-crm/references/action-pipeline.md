@@ -66,117 +66,62 @@ These are **heuristics, not rules**. Use the actual message content from `inbox_
 
 ## Playbook — exact tool sequence
 
-### Execution mode — small-batch first
+For a one-shot run (then see "Schedule it" below):
 
-Before iterating, decide which mode this run is in:
+1. **Discover** (if not cached):
+   - Workspace, target object(s), the pipeline-stage field on each, full option list with order.
+   - Member list (for owner attribution in breadcrumbs).
 
-- **One-shot user-initiated run:** process **only the first 20 candidate records** of the cohort, decide and apply moves, then surface results and ask:
-  > I processed the first 20 — moved **{N}**, flagged **{M}**, left **{K}** unchanged. Say *continue* to sweep the rest.
-- **Scheduled routine run:** process end-to-end with page-by-page pagination.
+2. **Define the cohort.** All records on the target object **except** those in terminal stages (Won, Lost) unless the user explicitly includes them.
 
-This is a universal skill rule (SKILL.md → "Small-batch first for one-shot runs"). It bounds context, gives the user a reversible checkpoint, and prevents the file-dump degradation cascade.
-
-### Page sizes and no sub-agents
-
-- Every `records_list` and `inbox_conversations_*` call uses **`limit: 20`**. Hard rule. See `fundamentals.md § 7.5` for the rationale.
-- Every tool call runs in the **main thread**. Do not invoke any sub-agent / task-delegation tool. The skill's caching architecture only works in one continuous main-thread context.
-
-### The steps
-
-1. **Discover — or use pre-cached IDs.**
-   - **If this is a scheduled run, the prompt should embed all the IDs** the agent needs: `workspaceId`, target `objectTypeId`(s), `pipelineStageFieldId`, the ordered list of stage option IDs (so the agent can apply the directionality rule without re-fetching), and the option IDs for terminal stages. Embed them in the scheduled prompt (`routines.md`). Don't re-discover at scheduled-run time.
-   - **If this is a one-shot run and the IDs aren't cached:** discover once — `workspaces_list`, `crm_objects_list`, `crm_fields_list`, `crm_field_options_list` on the stage field. Cache the ordered options.
-   - **List the user's saved views once:** `crm_record_views_list` — useful for cohort scoping in step 2.
-
-2. **Define the cohort.**
-
-   **Option A — Use a saved view (preferred when one fits).** If the user has a saved record view that signals an actionable cohort (e.g., "Active deals", "My open opportunities", "This quarter"), use it:
-   > I'll review the **{view name}** view — say so if you'd rather sweep all open records.
-
-   Pass `viewId` on every `records_list` call.
-
-   **Option B — All non-terminal records.** All records on the target object **except** those in terminal stages (Won, Lost) — filter terminal stages client-side per page from the cached option list.
-
-3. **Iterate the cohort page-by-page.** The canonical loop:
-
-   ```
-   cursor = None
-   while True:
-       page = records_list(
-           workspaceId, objectTypeId,
-           limit = 20,
-           cursor = cursor,
-           viewId = optional from step 2
-       )
-
-       # Filter terminal stages client-side
-       candidates = [r for r in page.data if r.stage not in terminal_stages]
-
-       # For each candidate, run steps 4 (signal) + 4b (cross-object) + 5 (self-check) + 6 (decide) + 7-8 (apply)
-       # Batch parallel sub-fetches in groups of ≤10
-       for candidate in candidates:
-           [step 4: gather direct signal]
-           [step 4b: cross-object signal — only for Deals / Companies]
-           [step 5: self-check]
-           decision = [step 6: decide STAY/MOVE/FLAG]
-           [step 7 or 8: apply]
-
-       if one_shot:
-           break
-       if not page.pagination.hasMore:
-           break
-       cursor = page.pagination.cursor
-   ```
-
-   **Hard rules:** one page of raw data at a time; main-thread only; if a tool result is dumped to a file by the runtime, read it once whole, not line-by-line.
-
-4. **Per-record: gather signal from the record itself.**
-   - `inbox_conversations_list` (record-scoped, `limit: 20`) → use the response's `lastMessageAtMs` and `lastMessageSnippet` directly. Don't refetch messages just for staleness.
-   - Only fetch `inbox_messages_list` (last 5-10 messages) when you need message *content* to interpret the signal (the snippet isn't enough).
+3. **For each candidate, gather signal from the record itself** — batch in parallel up to the rate limit:
+   - `inbox_conversations_list` (record-scoped) → conversations linked **directly to this record**.
+   - `inbox_messages_list` for the **most recent conversation(s)** (capped — usually 1–3 conversations per record is enough). Pull only the last 5–10 messages per conversation; you don't need the full history.
    - `notes_list` on the record → recent notes (last 5).
-   - The record's own field values from the `records_list` response — already in hand.
+   - The record's own field values from `records_get` (already cached if you just did a list).
 
-4b. **Per-record: cross-object signal — for Deals and Companies only.** This step is **non-negotiable** when operating on Deals or Companies — conversations happen with **people**, not with deals.
+3b. **For Deal and Company records, also gather signal from linked People.** This step is **non-negotiable** when operating on Deals or Companies — at the end of the day, conversations happen with **people**, not with deals. Deals usually have zero conversations attached directly; their linked Contacts have all the conversation activity. Skipping this step is the most common false-negative in the skill: an active deal whose linked people are actively replying gets concluded "no signal" because the agent only looked at the deal itself.
 
-   For each Deal or Company candidate:
-   - Read the record's relation fields → linked Person IDs.
-   - For each linked Person (cap at the **5 most recently updated**):
-     - `inbox_conversations_list` on that Person (`limit: 20`).
-     - Read `lastMessageAtMs` and `lastMessageSnippet` from the response. Fetch messages only if needed for interpretation.
-   - **Aggregate the signal across all linked People** for this Deal/Company: most recent timestamp, who sent it, substance.
-   - For Companies: also check linked Deals' direct conversations if any.
+   For each Deal or Company in the cohort:
+   - Read the record's relation fields and find linked **Person** records. Use `crm_fields_list` to identify relation fields if not cached; use the field values from step 3 to get the linked IDs.
+   - For each linked Person (cap at the **5 most recently updated** if there are many):
+     - `inbox_conversations_list` on that Person.
+     - `inbox_messages_list` for the most recent thread → last 5–10 messages.
+   - **Aggregate the signal across all linked People** for this Deal/Company:
+     - Most recent message timestamp (across all people on the deal).
+     - Who sent it (inbound from one of the people, or outbound from the user to one of them).
+     - Substance of the message (reply expressing interest, scheduling, pricing discussion, etc.).
+   - For Companies specifically: also check linked Deals' direct conversations if any exist.
 
-5. **Per-record: self-check before deciding — exhaust signal sources.**
-   - ✓ Checked the record's own conversations (step 4).
-   - ✓ For Deals or Companies, checked conversations on linked People (step 4b).
+   The aggregated signal then flows into the decision in step 4.
+
+4. **Self-check before deciding — exhaust signal sources.** Before assigning STAY / MOVE / FLAG to a record, verify:
+   - ✓ Checked the record's own conversations (step 3).
+   - ✓ If the record is a Deal or Company, checked conversations on all linked People (step 3b).
    - ✓ Checked recent notes for context.
-   - ✓ Checked `custom_activities` for prior breadcrumbs (so the agent doesn't re-litigate a previous decision).
-   - ✓ No sub-agent was invoked. If yes, restart in the main thread.
+   - ✓ Checked `custom_activities` for prior breadcrumbs (so you don't re-litigate a decision the previous run already made).
 
-   If you find yourself concluding "no signal" on a Deal that the user has touched in the last week, or a Company with active linked People, **that's a hint you didn't exhaust signal sources**. Re-check before writing the decision.
+   If you find yourself concluding "no signal" on a Deal that the user has touched in the last week, or a Company with active linked People, **that's a hint you didn't exhaust the signal sources**. Re-check before writing the decision. The cost of a missed step here is producing a wrong-feeling automated update that breaks the user's trust.
 
-6. **Per-record: decide.** Apply the heuristics in "What signals advance a contact" to the **aggregated** signal. Output:
+5. **Decide the target stage.** Apply the heuristics in "What signals advance a contact" above to the **aggregated** signal (from steps 3 + 3b). For each record, output one of:
    - **MOVE** → target stage ID.
    - **STAY** → current stage.
-   - **FLAG** → keep the record where it is, but write a custom activity surfacing the signal for human review.
+   - **FLAG** → keep the record where it is, but write a custom activity surfacing the signal for human review (used for re-opening Lost deals, ambiguous wins, etc.).
 
-   Apply the directionality rule: a MOVE is only valid if the target stage index ≥ current stage index in the cached ordering. If not, convert it to a FLAG.
+6. **Apply the directionality rule.** A MOVE is only valid if the target stage index ≥ current stage index in the cached ordering. If not, convert it to a FLAG.
 
-7. **Per-record: apply MOVE.**
+7. **Apply moves.** For each MOVE:
    - `records_update` on the stage field with the new option ID.
    - `custom_activities_create` with prefix:
      ```
      [breakcold-crm:auto-pipeline {YYYY-MM-DD}] Moved {From} → {To}. Signal: {one-line reason quoting the trigger, naming the person and channel where the signal came from}.
      ```
+     This is the shared memory between runs — the next run will see why the previous run moved this contact and won't second-guess.
 
-8. **Per-record: apply FLAG.** Write the `custom_activities_create` only (no field change). Roll into the run summary.
+8. **Apply flags.** For each FLAG, write the custom activity only (no field change). Roll these into the run summary so the user can review.
 
-9. **Summarize:**
+9. **Summarize**:
    > Moved **{N}** contacts forward, flagged **{M}** for review, left **{K}** unchanged. Biggest movers: **{name}** ({From} → {To}), **{name}** ({From} → {To})…
-   
-   For one-shot runs, end with: "Say *continue* to sweep the rest of the cohort."
-
-
 
 ## Optional but valuable: the breadcrumb-as-memory pattern
 
