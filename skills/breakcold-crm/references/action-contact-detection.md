@@ -113,14 +113,6 @@ These are duplicates of "this person doesn't fit a CRM category" but worth calli
 
 ## Playbook — exact tool sequence
 
-### Execution mode — small-batch first, main thread only, page size 20
-
-Before iterating the inbox, three universal rules apply (see `SKILL.md` universal rules + `fundamentals.md § 7.5`):
-
-- **Page size:** every `inbox_conversations_search` / `inbox_conversations_list` / `records_list` call uses **`limit: 20`**. This is non-negotiable — larger pages exceed the inline payload threshold on common agent runtimes, get saved to a file, and trigger the model's confidence-loss cascade.
-- **Main thread only:** every tool call runs directly in the agent's main thread. Do **not** invoke any sub-agent / task-delegation tool. Contact detection in particular is sensitive to this: sub-agents lose the cached duplicate-check state and may create the same record twice.
-- **Small-batch first for one-shot runs:** process only the first 20 conversations of the cohort, decide and create, then surface results and ask the user "say *continue* to sweep the rest." Scheduled runs proceed end-to-end without confirmation.
-
 1. **Discover** (cached): workspace, Person object, Person fields (especially email, LinkedIn, phone, company, source, status), existing Person records (you'll need them indexed for duplicate detection). Crucially, also pull the **user's CRM taxonomy** so you can evaluate category-fit (per the 95% confidence rule above):
    - Pipeline stage option labels via `crm_field_options_list` on the stage field.
    - Record view names via `crm_record_views_list` for Person and Company.

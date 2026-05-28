@@ -34,7 +34,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -73,7 +73,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "30 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -100,7 +100,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -122,7 +122,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -152,7 +152,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -194,7 +194,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -310,7 +310,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "30 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -332,7 +332,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -354,7 +354,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -376,7 +376,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -406,7 +406,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -473,7 +473,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -513,7 +513,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "30 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -535,7 +535,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -557,7 +557,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -579,7 +579,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -609,7 +609,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -646,7 +646,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -690,7 +690,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "30 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -712,7 +712,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -734,7 +734,7 @@
     "requiredScopes": [
       "crm:metadata:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -756,7 +756,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -786,7 +786,7 @@
     "requiredScopes": [
       "crm:metadata:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -829,7 +829,7 @@
     "requiredScopes": [
       "records:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -883,7 +883,7 @@
     "requiredScopes": [
       "inbox:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -913,7 +913,7 @@
     "requiredScopes": [
       "inbox:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -953,7 +953,7 @@
     "requiredScopes": [
       "inbox:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -975,7 +975,7 @@
     "requiredScopes": [
       "inbox:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1005,7 +1005,7 @@
     "requiredScopes": [
       "inbox:views:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1047,7 +1047,7 @@
     "requiredScopes": [
       "inbox:views:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "30 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1069,7 +1069,7 @@
     "requiredScopes": [
       "inbox:views:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1091,7 +1091,7 @@
     "requiredScopes": [
       "inbox:views:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1113,7 +1113,7 @@
     "requiredScopes": [
       "inbox:views:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1135,7 +1135,7 @@
     "requiredScopes": [
       "inbox:views:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1185,7 +1185,7 @@
     "requiredScopes": [
       "inbox:views:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1226,7 +1226,7 @@
     "requiredScopes": [
       "meetings:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1248,7 +1248,7 @@
     "requiredScopes": [
       "meetings:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1289,7 +1289,7 @@
     "requiredScopes": [
       "meetings:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1319,7 +1319,7 @@
     "requiredScopes": [
       "notes:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1352,7 +1352,7 @@
     "requiredScopes": [
       "notes:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1374,7 +1374,7 @@
     "requiredScopes": [
       "notes:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1404,7 +1404,7 @@
     "requiredScopes": [
       "notes:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1435,7 +1435,7 @@
     "requiredScopes": [
       "records:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1457,7 +1457,7 @@
     "requiredScopes": [
       "records:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "60 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1491,7 +1491,7 @@
     "requiredScopes": [
       "records:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "180 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1513,7 +1513,7 @@
     "requiredScopes": [
       "records:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1558,7 +1558,7 @@
     "requiredScopes": [
       "records:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1580,7 +1580,7 @@
     "requiredScopes": [
       "records:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1608,7 +1608,7 @@
     "requiredScopes": [
       "tasks:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1630,7 +1630,7 @@
     "requiredScopes": [
       "tasks:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1677,7 +1677,7 @@
     "requiredScopes": [
       "tasks:read"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "20 tokens",
     "rateLimit": "120 requests/min per tool/org",
     "inputSchema": {
       "type": "object",
@@ -1710,7 +1710,7 @@
     "requiredScopes": [
       "tasks:write"
     ],
-    "tokenCost": "0 tokens",
+    "tokenCost": "40 tokens",
     "rateLimit": "90 requests/min per tool/org",
     "inputSchema": {
       "type": "object",

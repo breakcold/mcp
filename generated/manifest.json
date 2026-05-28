@@ -1,7 +1,7 @@
 {
   "name": "Breakcold MCP",
   "repository": "breakcold/mcp",
-  "generatedAt": "2026-05-25T10:11:05.439Z",
+  "generatedAt": "2026-05-28T02:05:27.762Z",
   "source": {
     "repository": "breakcold/v2",
     "contract": "packages/backend/convex/public_api/contract.ts"
