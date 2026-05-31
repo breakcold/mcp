@@ -96,3 +96,11 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | `meetings_get` | Fetch one meeting with recording and transcript metadata. | `meetings:read` | 20 tokens |
 | `meetings_list` | List workspace meetings with recording and transcript metadata. | `meetings:read` | 20 tokens |
 | `meetings_transcript_list` | List full meeting transcript text in ordered paginated segments. | `meetings:read` | 20 tokens |
+
+## Webhooks
+
+| Tool | What it does | Required scopes | Token cost |
+| --- | --- | --- | --- |
+| `integration_hooks_create` | Create a Zapier or Make instant-trigger hook. | `webhooks:write` | 40 tokens |
+| `integration_hooks_delete` | Delete a Zapier or Make instant-trigger hook. | `webhooks:write` | 40 tokens |
+| `integration_samples_list` | List generated sample payloads for instant triggers. | `webhooks:write` | 20 tokens |
