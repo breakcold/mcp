@@ -1,0 +1,9 @@
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.skill
+claude/
+DEPLOYMENT.md
+LICENSE

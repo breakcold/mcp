@@ -4,6 +4,10 @@ Connect Breakcold to OpenClaw as a remote MCP server.
 
 Website: https://openclaw.ai
 
+## Skill
+
+Use the ClawHub/OpenClaw-specific Breakcold CRM skill at [`skills/breakcold-crm-openclaw`](../skills/breakcold-crm-openclaw). It is a strict text-only package with OpenClaw frontmatter metadata, so it can be installed or published separately from the broader universal skill bundle.
+
 ## Endpoint
 
 Use the MCP endpoint for the region where your Breakcold workspace is hosted.

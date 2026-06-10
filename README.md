@@ -1,6 +1,6 @@
 # Breakcold MCP
 
-Use Breakcold as a remote Model Context Protocol server from AI tools such as Claude, ChatGPT, Codex, Openclaw, Hermes, TypingMind, LM Studio, LibreChat, and Microsoft 365 Copilot.
+Use Breakcold as a remote Model Context Protocol server from AI tools such as Claude, ChatGPT, Codex, OpenClaw, Hermes, TypingMind, LM Studio, LibreChat, and Microsoft 365 Copilot.
 
 Through the hosted MCP server, agents can drive your CRM across multiple channels — email, LinkedIn, meetings, WhatsApp, and Telegram — by reading and writing people, companies, deals, tasks, notes, custom fields, and pipeline/Kanban views. The server also exposes your full multichannel inbox, so agents can act on real conversations: triage stalled threads, move deals forward on inbox signals, run workspace-aware reports, attach prospect research to records, detect and create contacts from inbound messages, and even bootstrap a full CRM from a website URL.
 
@@ -26,7 +26,7 @@ For user sign-in applications managed by Breakcold, send `X-Breakcold-Organizati
 - [Claude](./examples/claude.md)
 - [ChatGPT](./examples/chatgpt.md)
 - [Codex](./examples/codex.md)
-- [Openclaw](./examples/openclaw.md)
+- [OpenClaw](./examples/openclaw.md)
 - [Hermes](./examples/hermes.md)
 - [TypingMind](./examples/typingmind.md)
 - [LM Studio](./examples/lm-studio.md)
@@ -40,6 +40,8 @@ This repository also ships the [Breakcold CRM skill](./skills/breakcold-crm/SKIL
 The skill ships with six built-in workflows: (1) multichannel auto-tasks for stalled conversations, (2) pipeline auto-movement on inbox signals (never backward), (3) workspace-aware reports that adapt to sales, agency, recruiting, or community use, (4) prospect research notes written directly to records, (5) inbox contact detection with a strict 95% confidence rule, and (6) full CRM setup from a website URL.
 
 Install it by copying [skills/breakcold-crm](./skills/breakcold-crm) into your agent's skills directory, then configure the Breakcold MCP endpoint for your region. See [Skill setup](./docs/skill.md).
+
+For OpenClaw and ClawHub publishing, use [skills/breakcold-crm-openclaw](./skills/breakcold-crm-openclaw). It contains the same Breakcold CRM workflow playbooks in a strict text-only package with OpenClaw metadata, no binary assets, and no platform-specific bundles.
 
 ## Generated files
 
