@@ -77,10 +77,13 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 
 | Tool | What it does | Required scopes | Token cost |
 | --- | --- | --- | --- |
+| `inbox_attachments_upload_url_create` | Create a Convex file-storage upload URL for inbox send attachments. | `inbox:send` | 40 tokens |
+| `inbox_conversations_compose` | Send a new email, LinkedIn, Telegram, or WhatsApp message immediately and return the resulting conversation and message. | `inbox:send` | 40 tokens |
 | `inbox_conversations_list` | List conversations linked to a record. | `inbox:read` | 20 tokens |
 | `inbox_conversations_search` | List or search inbox conversations in a workspace, optionally filtered by inbox view or record-link state. | `inbox:read` | 20 tokens |
 | `inbox_messages_get` | Fetch one inbox message. | `inbox:read` | 20 tokens |
 | `inbox_messages_list` | List messages for a conversation. | `inbox:read` | 20 tokens |
+| `inbox_messages_send` | Send an immediate social message, email reply, or email forward in an existing inbox conversation. | `inbox:send` | 40 tokens |
 | `inbox_views_create` | Create an inbox view. | `inbox:views:write` | 40 tokens |
 | `inbox_views_delete` | Delete an inbox view. | `inbox:views:write` | 40 tokens |
 | `inbox_views_get` | Fetch one inbox view. | `inbox:views:read` | 20 tokens |
