@@ -84,6 +84,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | `inbox_messages_get` | Fetch one inbox message. | `inbox:read` | 20 tokens |
 | `inbox_messages_list` | List messages for a conversation. | `inbox:read` | 20 tokens |
 | `inbox_messages_send` | Send an immediate social message, email reply, or email forward in an existing inbox conversation. | `inbox:send` | 40 tokens |
+| `inbox_send_accounts_list` | List inbox accounts you can send from, including the workspaceIntegrationAccountId to use with inbox_conversations_compose. | `inbox:send` | 20 tokens |
 | `inbox_views_create` | Create an inbox view. | `inbox:views:write` | 40 tokens |
 | `inbox_views_delete` | Delete an inbox view. | `inbox:views:write` | 40 tokens |
 | `inbox_views_get` | Fetch one inbox view. | `inbox:views:read` | 20 tokens |
