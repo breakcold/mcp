@@ -53,7 +53,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | `records_get` | Fetch a CRM record by ID. | `records:read` | 20 tokens |
 | `records_list` | List or search CRM records. | `records:read` | 20 tokens |
 | `records_restore` | Restore an archived CRM record. | `records:write` | 40 tokens |
-| `records_update` | Update CRM record field values. | `records:write` | 40 tokens |
+| `records_update` | Update CRM record field values. Multiselect fields append by default; pass multiselectMode: "replace" to overwrite them (omitted options removed, [] clears). | `records:write` | 40 tokens |
 
 ## Tasks
 
