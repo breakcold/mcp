@@ -27,6 +27,8 @@ Configure the `/mcp/v1` URL as a protected resource in your MCP client. Breakcol
 
 When the client starts sign-in, Breakcold sends the user through WorkOS AuthKit. After sign-in, MCP tool calls run as that Breakcold user.
 
+For Claude Desktop OAuth issues where the browser opens but Claude returns a generic MCP authorization failure, remove the connector and reconnect with the exact regional MCP URL. If Safari is the default browser, retry with Chrome or another Chromium-based browser, or clear site data for `claude.ai` and the Breakcold AuthKit domain before reconnecting.
+
 ## Bearer token
 
 Bearer tokens are intended for MCP clients that ask for an API key, authorization token, bearer key, custom bearer token, or static header.
@@ -88,5 +90,7 @@ Use the Europe URL instead if your Breakcold workspace is hosted in Europe.
 `403 Forbidden` usually means the token or signed-in user does not have the required scope, workspace access, organization membership, or MCP access is not enabled for the organization.
 
 Wrong-region errors usually happen when the client uses the US endpoint for a Europe workspace, or the Europe endpoint for a US workspace.
+
+If OAuth succeeds in the browser but Claude still reports an MCP authorization failure, disconnect and reconnect the connector, then retry the flow in Chrome to rule out Safari cookie, content-blocker, or callback state issues.
 
 Never commit bearer tokens to source control or paste them in public logs.
