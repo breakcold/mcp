@@ -14,10 +14,9 @@ Both methods use the same MCP endpoint and the same Breakcold permission checks.
 
 OAuth calls run as the signed-in Breakcold user and enforce the same organization, workspace, and record permissions that user has in Breakcold.
 
-Use the MCP endpoint for your workspace region:
+Use this MCP endpoint:
 
-- United States: `https://http.us.breakcold.com/mcp/v1`
-- Europe: `https://http.eu.breakcold.com/mcp/v1`
+- Universal: `https://mcp.breakcold.com/mcp/v1`
 
 Configure the `/mcp/v1` URL as a protected resource in your MCP client. Breakcold exposes OAuth metadata at the matching protected-resource URL:
 
@@ -68,28 +67,24 @@ Codex with an environment variable:
 
 ~~~toml
 [mcp_servers.breakcold]
-url = "https://http.us.breakcold.com/mcp/v1"
+url = "https://mcp.breakcold.com/mcp/v1"
 bearer_token_env_var = "BREAKCOLD_MCP_TOKEN"
 ~~~
 
 Direct Streamable HTTP request:
 
 ~~~sh
-curl "https://http.us.breakcold.com/mcp/v1" \
+curl "https://mcp.breakcold.com/mcp/v1" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ~~~
-
-Use the Europe URL instead if your Breakcold workspace is hosted in Europe.
 
 ## Common errors
 
 `401 Unauthorized` usually means the token is missing, expired, revoked, copied incorrectly, or sent without the `Bearer ` prefix.
 
 `403 Forbidden` usually means the token or signed-in user does not have the required scope, workspace access, organization membership, or MCP access is not enabled for the organization.
-
-Wrong-region errors usually happen when the client uses the US endpoint for a Europe workspace, or the Europe endpoint for a US workspace.
 
 If OAuth succeeds in the browser but Claude still reports an MCP authorization failure, disconnect and reconnect the connector, then retry the flow in Chrome to rule out Safari cookie, content-blocker, or callback state issues.
 

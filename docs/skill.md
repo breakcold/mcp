@@ -19,21 +19,15 @@ cp -R skills/breakcold-crm ~/.codex/skills/
 Then configure the Breakcold MCP server:
 
 ~~~bash
-codex mcp add breakcold --url https://http.us.breakcold.com/mcp/v1
+codex mcp add breakcold --url https://mcp.breakcold.com/mcp/v1
 codex mcp login breakcold
-~~~
-
-Use the Europe endpoint instead if your workspace is hosted in Europe:
-
-~~~bash
-codex mcp add breakcold --url https://http.eu.breakcold.com/mcp/v1
 ~~~
 
 For bearer-token access, configure the server in `~/.codex/config.toml` and point it to an environment variable:
 
 ~~~toml
 [mcp_servers.breakcold]
-url = "https://http.us.breakcold.com/mcp/v1"
+url = "https://mcp.breakcold.com/mcp/v1"
 bearer_token_env_var = "BREAKCOLD_MCP_TOKEN"
 ~~~
 
@@ -45,4 +39,4 @@ Use the same folder for any agent that supports AgentSkills or filesystem-loaded
 - IDE-style agents: point project rules at `skills/breakcold-crm/SKILL.md`.
 - Chat-style agents: paste `SKILL.md` as the main instruction and attach the relevant reference files.
 
-Always connect the Breakcold MCP endpoint for the user's workspace region before running the skill.
+Always connect the Breakcold MCP endpoint before running the skill.
