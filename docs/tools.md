@@ -49,7 +49,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | --- | --- | --- | --- |
 | `custom_activities_create` | Create a custom activity linked to a CRM record and notify supplied participant users in-app and, when enabled by their preferences, by email. | `records:write` | 40 tokens |
 | `records_archive` | Archive a CRM record. | `records:write` | 40 tokens |
-| `records_create` | Create a CRM record, potentially start workspace-configured automatic enrichment, and deliver the record-created event to matching active webhook URLs. | `records:write` | 40 tokens |
+| `records_create` | Create one complete CRM record atomically. Supply every required field and a stable idempotency key. When creating a deal from a person, include that person's record id in the deal contact relation field; do not create a partial deal and patch it later. | `records:write` | 40 tokens |
 | `records_get` | Fetch a CRM record by ID. | `records:read` | 20 tokens |
 | `records_list` | List or search CRM records. | `records:read` | 20 tokens |
 | `records_restore` | Restore an archived CRM record. | `records:write` | 40 tokens |
