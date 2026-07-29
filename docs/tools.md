@@ -78,6 +78,9 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | Tool | What it does | Required scopes | Token cost |
 | --- | --- | --- | --- |
 | `inbox_attachments_upload_url_create` | Generate a temporary Convex file-storage upload URL for inbox send attachments without uploading or modifying a file. | `inbox:send` | 0.4 tokens |
+| `inbox_conversation_draft_clear` | Clear your private draft for an inbox conversation. | `inbox:send` | 0.4 tokens |
+| `inbox_conversation_draft_get` | Get your private draft for an inbox conversation, or null when none exists. | `inbox:read` | 0.2 tokens |
+| `inbox_conversation_draft_set` | Create or update your private inbox conversation draft. Blank content clears it; HTML is supported for email only. | `inbox:send` | 0.4 tokens |
 | `inbox_conversations_compose` | Send a new email, LinkedIn, Telegram, or WhatsApp message immediately and return the resulting conversation and message. | `inbox:send` | 0.4 tokens |
 | `inbox_conversations_list` | List conversations linked to a record. | `inbox:read` | 0.2 tokens |
 | `inbox_conversations_search` | List or search inbox conversations in a workspace, optionally filtered by inbox view or record-link state. | `inbox:read` | 0.2 tokens |
