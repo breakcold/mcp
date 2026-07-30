@@ -81,12 +81,12 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | `inbox_conversation_draft_clear` | Clear your private draft for an inbox conversation. | `inbox:send` | 0.4 tokens |
 | `inbox_conversation_draft_get` | Get your private draft for an inbox conversation, or null when none exists. | `inbox:read` | 0.2 tokens |
 | `inbox_conversation_draft_set` | Create or update your private inbox conversation draft. Blank content clears it; HTML is supported for email only. | `inbox:send` | 0.4 tokens |
-| `inbox_conversations_compose` | Send a new email, LinkedIn, Telegram, or WhatsApp message immediately and return the resulting conversation and message. | `inbox:send` | 0.4 tokens |
+| `inbox_conversations_compose` | Prepare a new email, LinkedIn, Telegram, or WhatsApp message as a non-sending draft preview by default. Set sendMode to "send" only after the user explicitly confirms immediate delivery. | `inbox:send` | 0.4 tokens |
 | `inbox_conversations_list` | List conversations linked to a record. | `inbox:read` | 0.2 tokens |
 | `inbox_conversations_search` | List or search inbox conversations in a workspace, optionally filtered by inbox view or record-link state. | `inbox:read` | 0.2 tokens |
 | `inbox_messages_get` | Fetch one inbox message. | `inbox:read` | 0.2 tokens |
 | `inbox_messages_list` | List messages for a conversation. | `inbox:read` | 0.2 tokens |
-| `inbox_messages_send` | Send an immediate social message, email reply, or email forward in an existing inbox conversation. | `inbox:send` | 0.4 tokens |
+| `inbox_messages_send` | Prepare a social message, email reply, or email forward as a non-sending draft preview by default. Set sendMode to "send" only after the user explicitly confirms immediate delivery. | `inbox:send` | 0.4 tokens |
 | `inbox_send_accounts_list` | List inbox accounts you can send from, including the workspaceIntegrationAccountId to use with inbox_conversations_compose. | `inbox:send` | 0.2 tokens |
 | `inbox_views_create` | Create an inbox view. | `inbox:views:write` | 0.4 tokens |
 | `inbox_views_delete` | Delete an inbox view. | `inbox:views:write` | 0.4 tokens |
