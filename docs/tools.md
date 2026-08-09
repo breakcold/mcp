@@ -61,6 +61,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | --- | --- | --- | --- |
 | `tasks_complete` | Mark a task as done. | `tasks:write` | 0.4 tokens |
 | `tasks_create` | Create a task linked to a record. | `tasks:write` | 0.4 tokens |
+| `tasks_delete` | Soft-delete a task so it no longer appears in Breakcold task lists. | `tasks:write` | 0.4 tokens |
 | `tasks_list` | List tasks linked to a record. | `tasks:read` | 0.2 tokens |
 | `tasks_update` | Update task details. | `tasks:write` | 0.4 tokens |
 
