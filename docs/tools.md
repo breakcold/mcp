@@ -84,7 +84,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | `inbox_conversation_draft_set` | Create or update your private inbox conversation draft. Blank content clears it; HTML is supported for email only. | `inbox:send` | 0.4 tokens |
 | `inbox_conversations_compose` | Prepare a new email, LinkedIn, Telegram, or WhatsApp message as a non-sending draft preview by default. Set sendMode to "send" only after the user explicitly confirms immediate delivery. | `inbox:send` | 0.4 tokens |
 | `inbox_conversations_list` | List conversations linked to a record. | `inbox:read` | 0.2 tokens |
-| `inbox_conversations_search` | List or search inbox conversations in a workspace, optionally filtered by inbox view or record-link state. | `inbox:read` | 0.2 tokens |
+| `inbox_conversations_search` | List or search inbox conversations in a workspace. Search covers participant names, email addresses, phone numbers, linked-record names, subjects, and message snippets. Search is token based, ranked by relevance, supports prefix matching on the final term, and does not correct typos. Optionally filter by inbox view or record-link state. | `inbox:read` | 0.2 tokens |
 | `inbox_messages_get` | Fetch one inbox message. | `inbox:read` | 0.2 tokens |
 | `inbox_messages_list` | List messages for a conversation. | `inbox:read` | 0.2 tokens |
 | `inbox_messages_send` | Prepare a social message, email reply, or email forward as a non-sending draft preview by default. Set sendMode to "send" only after the user explicitly confirms immediate delivery. | `inbox:send` | 0.4 tokens |
