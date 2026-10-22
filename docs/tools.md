@@ -70,6 +70,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | Tool | What it does | Required scopes | Token cost |
 | --- | --- | --- | --- |
 | `notes_create` | Create a note linked to a record. Matching active webhooks receive the note-created event at their external URLs. | `notes:write` | 0.4 tokens |
+| `notes_delete` | Permanently delete a note you wrote. Matching active webhooks receive the note-deleted event at their external URLs. | `notes:write` | 0.4 tokens |
 | `notes_get` | Fetch a note by ID. | `notes:read` | 0.2 tokens |
 | `notes_list` | List notes linked to a record. | `notes:read` | 0.2 tokens |
 | `notes_update` | Update note content. Matching active webhooks receive the note-updated event at their external URLs. | `notes:write` | 0.4 tokens |
