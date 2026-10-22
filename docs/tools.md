@@ -105,7 +105,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | Tool | What it does | Required scopes | Token cost |
 | --- | --- | --- | --- |
 | `meetings_get` | Fetch one meeting with recording and transcript metadata. | `meetings:read` | 0.2 tokens |
-| `meetings_list` | List workspace meetings with recording and transcript metadata. | `meetings:read` | 0.2 tokens |
+| `meetings_list` | List workspace meetings with recording and transcript metadata. Pass recordId for the meetings with one person or company (find it with records_list). | `meetings:read` | 0.2 tokens |
 | `meetings_transcript_list` | List full meeting transcript text in ordered paginated segments. | `meetings:read` | 0.2 tokens |
 
 ## Webhooks
