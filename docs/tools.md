@@ -51,7 +51,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | `records_archive` | Archive a CRM record. | `records:write` | 0.4 tokens |
 | `records_create` | Create one complete CRM record atomically. Supply every required field and a stable idempotency key. When creating a deal from a person, include that person's record id in the deal contact relation field; do not create a partial deal and patch it later. | `records:write` | 0.4 tokens |
 | `records_get` | Fetch a CRM record by ID. | `records:read` | 0.2 tokens |
-| `records_list` | List or search CRM records. | `records:read` | 0.2 tokens |
+| `records_list` | List or search CRM records in one workspace. Pass workspaceId (get it from workspaces_list) or a viewId. | `records:read` | 0.2 tokens |
 | `records_restore` | Restore an archived CRM record. | `records:write` | 0.4 tokens |
 | `records_update` | Update CRM record field values. Multiselect fields append by default; pass multiselectMode: "replace" to overwrite them (omitted options removed, [] clears). Identity-field changes may start configured automatic enrichment, and matching active webhooks receive field-update events at their external URLs. | `records:write` | 0.4 tokens |
 
