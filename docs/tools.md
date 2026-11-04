@@ -80,6 +80,7 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | Tool | What it does | Required scopes | Token cost |
 | --- | --- | --- | --- |
 | `inbox_attachments_upload_url_create` | Generate a temporary Convex file-storage upload URL for inbox send attachments without uploading or modifying a file. | `inbox:send` | 0.4 tokens |
+| `inbox_conversation_attendees_list` | List every participant of a conversation, page by page. Use it when a conversation from inbox_conversations_search or inbox_conversations_list has attendeesTruncated true (large group chats), for example to find the attendeeId to pass to inbox_conversation_record_link. | `inbox:read` | 0.2 tokens |
 | `inbox_conversation_draft_clear` | Clear your private draft for an inbox conversation. | `inbox:send` | 0.4 tokens |
 | `inbox_conversation_draft_get` | Get your private draft for an inbox conversation, or null when none exists. | `inbox:read` | 0.2 tokens |
 | `inbox_conversation_draft_set` | Create or replace your private inbox conversation draft. This overwrites any existing draft on the conversation (one draft per user per conversation); the response's replacedExisting tells you whether one was replaced. Use inbox_conversation_draft_get or inbox_conversation_drafts_list first to avoid overwriting a draft. Blank content clears it; HTML is supported for email only. | `inbox:send` | 0.4 tokens |
