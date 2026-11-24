@@ -49,11 +49,11 @@ Breakcold MCP tools are generated from the same public API contract as the REST 
 | --- | --- | --- | --- |
 | `custom_activities_create` | Create a custom activity linked to a CRM record and notify supplied participant users in-app and, when enabled by their preferences, by email. | `records:write` | 0.4 tokens |
 | `record_events_list` | List a CRM record's activity timeline, newest first: field changes with old and new values (who changed what, when), enrichment, notes, tasks. Filter by category (e.g. crm for field changes) or action (e.g. field_updated). | `records:read` | 0.2 tokens |
-| `records_archive` | Archive a CRM record. | `records:write` | 0.4 tokens |
+| `records_archive` | Archive a CRM record (any object). It leaves list and pipeline views and search, and keeps all its data. Undo with records_restore. | `records:write` | 0.4 tokens |
 | `records_create` | Create one complete CRM record atomically. Supply every required field and a stable idempotency key. When creating a deal from a person, include that person's record id in the deal contact relation field; do not create a partial deal and patch it later. | `records:write` | 0.4 tokens |
-| `records_get` | Fetch a CRM record by ID. | `records:read` | 0.2 tokens |
-| `records_list` | List or search CRM records in one workspace. Pass workspaceId (get it from workspaces_list) or a viewId. | `records:read` | 0.2 tokens |
-| `records_restore` | Restore an archived CRM record. | `records:write` | 0.4 tokens |
+| `records_get` | Fetch a CRM record by ID. Archived records are returned too, with isArchived: true and archivedAt. | `records:read` | 0.2 tokens |
+| `records_list` | List or search CRM records in one workspace. Pass workspaceId (get it from workspaces_list) or a viewId. Archived records are listed with archived: true. | `records:read` | 0.2 tokens |
+| `records_restore` | Unarchive (restore) an archived CRM record so it shows again in views and search. Merged records can't be unarchived. | `records:write` | 0.4 tokens |
 | `records_update` | Update CRM record field values. Multiselect fields append by default; pass multiselectMode: "replace" to overwrite them (omitted options removed, [] clears). Identity-field changes may start configured automatic enrichment, and matching active webhooks receive field-update events at their external URLs. | `records:write` | 0.4 tokens |
 
 ## Tasks
